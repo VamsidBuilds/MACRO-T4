@@ -7,7 +7,6 @@
         compatible = "zmk,keymap";
 
         sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>; // Volume controls
-        // Alternative test binding: <&inc_dec_kp K_UP K_DOWN>
 
         default_layer {
             bindings = <
