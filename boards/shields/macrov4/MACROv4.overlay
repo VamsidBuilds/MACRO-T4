@@ -1,17 +1,9 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
 / {
-    // Define sensors early so it can be referenced in chosen
-    sensors: sensors {
-        compatible = "zmk,keymap-sensors";
-        sensors = <&left_encoder>;
-        triggers-per-rotation = <20>;
-    };
-
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &default_transform;
-        zmk,sensors = &sensors; // Now this works because sensors is defined above
     };
 
     default_transform: keymap_transform0 {
@@ -30,23 +22,32 @@
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
         diode-direction = "col2row";
-        col-gpios =
-            <&gpio0 28 GPIO_ACTIVE_HIGH>,
-            <&gpio0 29 GPIO_ACTIVE_HIGH>,
-            <&gpio0 30 GPIO_ACTIVE_HIGH>,
-            <&gpio0 31 GPIO_ACTIVE_HIGH>;
-        row-gpios =
-            <&gpio0 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&gpio0 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&gpio0 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&gpio0 23 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        col-gpios
+            = <&gpio0 28 GPIO_ACTIVE_HIGH>
+            , <&gpio0 29 GPIO_ACTIVE_HIGH>
+            , <&gpio0 30 GPIO_ACTIVE_HIGH>
+            , <&gpio0 31 GPIO_ACTIVE_HIGH>;
+
+        row-gpios
+            = <&gpio0 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 23 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
     left_encoder: encoder_left {
         compatible = "alps,ec11";
-        a-gpios = <&gpio0 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        b-gpios = <&gpio0 19 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        steps = <20>;
+        label = "LEFT_ENCODER";
+        a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // MD_15 (A)
+        b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // MD_14 (B)
+        steps = <80>;
         status = "okay";
+        debounce-interval = <5>; // Debounce in milliseconds
+    };
+
+    sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&left_encoder>;
+        triggers-per-rotation = <20>; // Sensitivity
     };
 };
