@@ -20,7 +20,7 @@
 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
-        diode-direction = "col2row";
+        diode-direction = "col2row";        
         col-gpios
             = <&gpio0 28 GPIO_ACTIVE_HIGH>,
               <&gpio0 29 GPIO_ACTIVE_HIGH>,
@@ -28,36 +28,20 @@
               <&gpio0 31 GPIO_ACTIVE_HIGH>;
 
         row-gpios
-            = <&gpio0 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-              <&gpio0 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
+            = <&gpio0 7  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
+              <&gpio0 9  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
               <&gpio0 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
               <&gpio0 23 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
-
-    // Modified encoder configuration
     left_encoder: encoder_left {
         compatible = "alps,ec11";
-        // Try these configurations IN ORDER until it works:
-        
-        // Option 1: Most common working configuration (no pull-ups)
-        a-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-        b-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
-        
-        // Option 2: If Option 1 doesn't work (with pull-downs)
-        // a-gpios = <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
-        // b-gpios = <&gpio1 14 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
-        
-        // Option 3: Original with pull-ups (least likely to work)
-        // a-gpios = <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        // b-gpios = <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-
-        steps = <24>;  // Standard for EC11 (24 pulses/rotation)
+        a-gpios = <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        b-gpios = <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        steps = <24>;
         status = "okay";
     };
-
     sensors {
         compatible = "zmk,keymap-sensors";
         sensors = <&left_encoder>;
-        triggers-per-rotation = <6>;  // 24 steps ÷ 4 pulses per detent
     };
 };
